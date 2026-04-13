@@ -50,7 +50,7 @@ future_df["promotion"] = 1
 future_df["temperature"] = 30
 future_df["fuel_price"] = 85
 
-# Predict
+# Predict future sales
 predictions = model.predict(
     future_df[["day", "month", "year", "holiday", "promotion", "temperature", "fuel_price"]]
 )
@@ -63,7 +63,7 @@ for date, pred in zip(future_df["date"], predictions):
     print(f"{date.date()} → {int(pred)}")
 
 # -------------------------------
-# VISUALIZATION
+# GRAPH 1: LINE CHART
 # -------------------------------
 plt.figure()
 
@@ -77,5 +77,27 @@ plt.xlabel("Date")
 plt.ylabel("Sales")
 plt.title("Sales Forecasting")
 plt.legend()
+
+plt.show()
+
+# -------------------------------
+# GRAPH 2: PIE CHART
+# -------------------------------
+
+# Create sales categories
+bins = [0, 200, 300, 400, 1000]
+labels = ["Low Sales", "Medium Sales", "High Sales", "Very High Sales"]
+
+df["sales_category"] = pd.cut(df["sales"], bins=bins, labels=labels)
+
+# Count categories
+sales_counts = df["sales_category"].value_counts()
+
+# Plot pie chart
+plt.figure()
+sales_counts.plot(kind='pie', autopct='%1.1f%%')
+
+plt.title("Sales Distribution by Category")
+plt.ylabel("")
 
 plt.show()
